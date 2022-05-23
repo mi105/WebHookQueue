@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace WebHookQueue.Controllers
 {
@@ -7,22 +8,29 @@ namespace WebHookQueue.Controllers
     public class WebHookInfoController : ControllerBase
     {
 
-        private WebHookInfoContext context;
+        private WebHookInfoRepository repository;
 
-        public WebHookInfoController(WebHookInfoContext context)
+        public WebHookInfoController(WebHookInfoRepository repo)
         {
-            this.context = context;
+            this.repository = repo;
         }
 
 
 
         [HttpPost(Name = "PostWebHookInfo")]
-        public async Task<WebHookInfoDto> Post(WebHookInfoDto webHookInfoDto)
+        public async Task Post(WebHookInfoDto webHookInfoDto)
         {
-            WebHookInfoModel model = new WebHookInfoModel(webHookInfoDto.Date, webHookInfoDto.Json);
-            await context.AddAsync(model);
-            await context.SaveChangesAsync();
-            return webHookInfoDto;
+            try
+            {
+                throw new NotImplementedException();
+                await repository.TrySaveToDb(webHookInfoDto);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Exception thrown saving to database: {ex.Message}");
+                ConcurrentQueueSingleton.Instance.WebHookInfoDtos.Enqueue(webHookInfoDto);
+            }
+            
         }
     }
 }
