@@ -9,7 +9,7 @@ namespace WebHookQueue.Services
 
     internal class ScopedProcessingService : IScopedProcessingService
     {
-        private const int MillisecondsDelay = 60000;
+        private const int MillisecondsDelay = 30000;
         private int executionCount = 0;
         private readonly WebHookInfoRepository _webHookInfoRepository;
 

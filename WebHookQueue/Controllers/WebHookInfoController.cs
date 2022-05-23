@@ -22,7 +22,7 @@ namespace WebHookQueue.Controllers
         {
             try
             {
-                throw new NotImplementedException();
+                //throw new NotImplementedException();
                 await repository.TrySaveToDb(webHookInfoDto);
             }
             catch (Exception ex)

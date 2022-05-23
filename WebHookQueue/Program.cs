@@ -86,7 +86,6 @@ void OnStopping()
         try
         {
             var data = ConcurrentQueueSingleton.Instance.WebHookInfoDtos.ToList();
-            data.Reverse();
             string text = JsonConvert.SerializeObject(data);
             await File.WriteAllTextAsync(jsonPath, text);
         }
