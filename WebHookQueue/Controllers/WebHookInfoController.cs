@@ -20,17 +20,7 @@ namespace WebHookQueue.Controllers
         [HttpPost(Name = "PostWebHookInfo")]
         public async Task Post(WebHookInfoDto webHookInfoDto)
         {
-            try
-            {
-                //throw new NotImplementedException();
-                await repository.TrySaveToDb(webHookInfoDto);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Exception thrown saving to database: {ex.Message}");
-                ConcurrentQueueSingleton.Instance.WebHookInfoDtos.Enqueue(webHookInfoDto);
-            }
-            
+            await Task.Run(()=>ConcurrentQueueSingleton.Instance.WebHookInfoDtos.Enqueue(webHookInfoDto));
         }
     }
 }
